@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: mng
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    listener:
+      simple:
+        concurrency: 100
+        max-concurrency: 100
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=myprojecttest;encrypt=false;
+    username: sa
+    password: th!131030
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: create # 개발 초기에는 update 또는 create, 운영에서는 none 또는 validate
+    properties:
+      hibernate:
+        format_sql: true # SQL 로그를 예쁘게 포맷팅
+    show-sql: true # 실행되는 SQL 쿼리를 로그로 보여줌

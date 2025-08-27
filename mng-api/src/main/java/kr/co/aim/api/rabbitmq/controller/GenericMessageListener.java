@@ -1,0 +1,42 @@
+package kr.co.aim.api.rabbitmq.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.aim.api.dto.request.BaseMessage;
+import kr.co.aim.common.handler.MessageHandler;
+import kr.co.aim.api.rabbitmq.controller.dispatcher.MessageDispatcher;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class GenericMessageListener {
+
+    private final MessageDispatcher messageDispatcher;
+    private final ObjectMapper objectMapper;
+
+    @RabbitListener(id = "demoListener",queues="demo-queue")
+    @SneakyThrows
+    public Object recevie(String message) {
+        log.info("Received raw message: {}", message);
+
+        // 1. MessageName 추출
+        BaseMessage baseMessage = objectMapper.readValue(message, BaseMessage.class);
+        String messageName = baseMessage.getMessageName();
+
+        // 2. Dispatcher를 통해 적절한 핸들러 찾기
+        MessageHandler<String> handler = messageDispatcher.getHandler(messageName);
+
+        Object replyObject = null;
+        if (handler != null) {
+            // 3. 핸들러에게 작업 위임
+            replyObject = handler.handle(message);
+        } else {
+            log.warn("⚠️ No handler found for messageName: {}", messageName);
+        }
+        return replyObject;
+    }
+}
