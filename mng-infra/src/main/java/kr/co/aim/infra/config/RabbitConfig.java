@@ -8,8 +8,10 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("rabbitmq")
 public class RabbitConfig {
 
     // 사용할 Exchange, Queue, Routing Key를 상수로 정의

@@ -6,12 +6,14 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.MDC;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Aspect
 @Component
+@Profile("rabbitmq")
 public class RabbitMQAspect {
 
     // 1. @RabbitListener 어노테이션이 달린 모든 메서드를 Pointcut으로 지정

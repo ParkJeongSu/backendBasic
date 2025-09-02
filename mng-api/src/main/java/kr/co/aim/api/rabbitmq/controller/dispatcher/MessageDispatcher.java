@@ -4,6 +4,7 @@ package kr.co.aim.api.rabbitmq.controller.dispatcher;
 import jakarta.annotation.PostConstruct;
 import kr.co.aim.common.handler.MessageHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor // final 필드에 대한 생성자를 자동으로 만들어줍니다. (DI)
+@Profile("rabbitmq")
 public class MessageDispatcher {
 
     // Spring이 MessageHandler 인터페이스를 구현한 모든 빈을 여기에 주입해 줍니다.

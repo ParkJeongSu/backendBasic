@@ -1,6 +1,33 @@
 spring:
   application:
     name: mng
+  profiles:
+    active: scheduler # 또는 rabbitmq, scheduler,rabbitmq 등으로 설정 가능
+  datasource:
+    jdbc-url: jdbc:sqlserver://localhost:1433;databaseName=myprojecttest;encrypt=false;
+    username: sa
+    password: th!131030
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: none # 개발 초기에는 update 또는 create, 운영에서는 none 또는 validate
+    properties:
+      hibernate:
+        format_sql: true # SQL 로그를 예쁘게 포맷팅
+    show-sql: true # 실행되는 SQL 쿼리를 로그로 보여줌
+  # DB2 데이터소스 추가
+  db2-datasource:
+    jdbc-url: jdbc:db2://localhost:50000/testdb # 실제 DB2 URL로 변경해주세요
+    username: db2inst1 # 실제 DB2 계정으로 변경해주세요
+    password: 1234 # 실제 DB2 비밀번호로 변경해주세요
+    driver-class-name: com.ibm.db2.jcc.DB2Driver
+
+---
+# 'rabbitmq' 프로필이 활성화될 때만 이 설정이 적용됩니다.
+spring:
+  config:
+    activate:
+      on-profile: rabbitmq
   rabbitmq:
     host: localhost
     port: 5672
@@ -10,15 +37,3 @@ spring:
       simple:
         concurrency: 100
         max-concurrency: 100
-  datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=myprojecttest;encrypt=false;
-    username: sa
-    password: th!131030
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-  jpa:
-    hibernate:
-      ddl-auto: create # 개발 초기에는 update 또는 create, 운영에서는 none 또는 validate
-    properties:
-      hibernate:
-        format_sql: true # SQL 로그를 예쁘게 포맷팅
-    show-sql: true # 실행되는 SQL 쿼리를 로그로 보여줌

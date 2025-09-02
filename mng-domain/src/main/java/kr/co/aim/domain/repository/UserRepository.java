@@ -2,6 +2,7 @@ package kr.co.aim.domain.repository;
 
 import kr.co.aim.domain.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,4 +31,10 @@ public interface UserRepository {
      * @return Optional<User>
      */
     Optional<User> findByEmail(String email);
+
+    /**
+     * 모든 사용자를 찾습니다.
+     * @return 모든 사용자 도메인 객체 리스트
+     */
+    List<User> findAll();
 }

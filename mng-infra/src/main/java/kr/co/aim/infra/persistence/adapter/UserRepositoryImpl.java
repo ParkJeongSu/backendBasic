@@ -8,7 +8,9 @@ import kr.co.aim.infra.persistence.springdatajpa.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * UserRepository의 JPA 기반 구현체.
@@ -46,5 +48,15 @@ public class UserRepositoryImpl implements UserRepository {
         Optional<UserEntity> entityOptional = userJpaRepository.findByEmail(email);
         // 2. 조회된 Optional<Entity>를 Optional<Domain>으로 변환하여 반환
         return entityOptional.map(userMapper::toDomain);
+    }
+
+    @Override
+    public List<User> findAll() {
+        // 1. JPA 리포지토리를 통해 모든 UserEntity 조회
+        List<UserEntity> entities = userJpaRepository.findAll();
+        // 2. Entity 리스트를 Domain 객체 리스트로 변환하여 반환
+        return entities.stream()
+                .map(userMapper::toDomain)
+                .collect(Collectors.toList());
     }
 }
