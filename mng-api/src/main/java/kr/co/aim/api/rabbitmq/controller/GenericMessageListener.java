@@ -1,7 +1,7 @@
 package kr.co.aim.api.rabbitmq.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.aim.api.dto.request.BaseMessage;
+import kr.co.aim.api.dto.request.MessageHeader;
 import kr.co.aim.common.handler.MessageHandler;
 import kr.co.aim.api.rabbitmq.controller.dispatcher.MessageDispatcher;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ public class GenericMessageListener {
         log.info("Received raw message: {}", message);
 
         // 1. MessageName 추출
-        BaseMessage baseMessage = objectMapper.readValue(message, BaseMessage.class);
-        String messageName = baseMessage.getMessageName();
-
+        MessageHeader messageHeader = objectMapper.readValue(message, MessageHeader.class);
+        String messageName = messageHeader.getHeader().getMessageName();
+        log.info("messageName : {}", messageName);
         // 2. Dispatcher를 통해 적절한 핸들러 찾기
         MessageHandler<String> handler = messageDispatcher.getHandler(messageName);
 

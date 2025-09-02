@@ -1,8 +1,11 @@
 package kr.co.aim.api.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.aim.api.dto.request.BaseMessage;
 import kr.co.aim.api.dto.request.Sample;
 import kr.co.aim.api.dto.response.ReplySample;
+import kr.co.aim.common.format.AreYouThereBody;
+import kr.co.aim.common.format.Header;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -76,5 +79,35 @@ public class MessageSendController {
         }
 
         //return (ReplySample)response;
+    }
+
+    @SneakyThrows
+    @PostMapping("/send4")
+    public void sendMessage4(@RequestParam String message){
+
+        BaseMessage<AreYouThereBody> request = new BaseMessage<>();
+        Header header = Header.builder().messageName("AreYouThereRequest")
+                .eventComment("test")
+                .eventUser("pjs")
+                .version("1.0")
+                .replyQueueName("abc")
+                .timestamp("test")
+                .transactionId("123")
+                .build();
+        AreYouThereBody body = AreYouThereBody.
+                builder()
+                        .machineName("machine1")
+                .build();
+        request.setHeader(header);
+        request.setBody(body);
+
+        // 3. DTO 객체를 JSON 문자열로 직접 변환합니다.
+        String jsonPayload = objectMapper.writeValueAsString(request);
+
+        System.out.println("Sending JSON Payload: " + jsonPayload);
+        rabbitTemplate.convertAndSend(
+                "demo-queue",
+                jsonPayload
+        );
     }
 }
