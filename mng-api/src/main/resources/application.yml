@@ -1,8 +1,10 @@
+server:
+  port: 8081
 spring:
   application:
     name: mng
   profiles:
-    active: scheduler # 또는 rabbitmq, scheduler,rabbitmq 등으로 설정 가능
+    active: scheduler # 또는 rabbitmq | scheduler,rabbitmq | dispatcher 등으로 설정 가능
   datasource:
     jdbc-url: jdbc:sqlserver://localhost:1433;databaseName=myprojecttest;encrypt=false;
     username: sa
@@ -21,7 +23,11 @@ spring:
     username: db2inst1 # 실제 DB2 계정으로 변경해주세요
     password: 1234 # 실제 DB2 비밀번호로 변경해주세요
     driver-class-name: com.ibm.db2.jcc.DB2Driver
-
+logging:
+  level:
+    net:
+      javacrumbs:
+        shedlock: DEBUG
 ---
 # 'rabbitmq' 프로필이 활성화될 때만 이 설정이 적용됩니다.
 spring:
@@ -35,5 +41,5 @@ spring:
     password: admin
     listener:
       simple:
-        concurrency: 100
-        max-concurrency: 100
+        concurrency: 10
+        max-concurrency: 10

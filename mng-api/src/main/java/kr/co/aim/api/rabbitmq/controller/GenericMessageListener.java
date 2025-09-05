@@ -2,6 +2,7 @@ package kr.co.aim.api.rabbitmq.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.aim.api.dto.request.MessageHeader;
+import kr.co.aim.api.service.RouterService;
 import kr.co.aim.common.handler.MessageHandler;
 import kr.co.aim.api.rabbitmq.controller.dispatcher.MessageDispatcher;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile("rabbitmq")
+@Profile({"rabbitmq","dispatcher"})
 public class GenericMessageListener {
 
     private final MessageDispatcher messageDispatcher;
+    private final RouterService routerService;
     private final ObjectMapper objectMapper;
 
     @RabbitListener(id = "demoListener",queues="demo-queue")

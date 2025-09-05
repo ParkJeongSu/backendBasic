@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile("rabbitmq")
 public class AreYouThereRequestHandler implements MessageHandler<String> {
 
     private final ObjectMapper objectMapper;

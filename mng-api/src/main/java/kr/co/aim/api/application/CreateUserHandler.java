@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile("rabbitmq")
 public class CreateUserHandler implements MessageHandler<String> {
 
     private final ObjectMapper objectMapper;

@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("rabbitmq")
 public class RabbitConfig {
 
     // 사용할 Exchange, Queue, Routing Key를 상수로 정의
@@ -21,17 +20,26 @@ public class RabbitConfig {
 
     // Exchange 빈 등록
     @Bean
+    @Profile({"rabbitmq","dispatcher"})
     DirectExchange exchange() {
         return new DirectExchange(RPC_EXCHANGE_NAME);
     }
 
     @Bean
+    @Profile({"rabbitmq"})
     public Queue demoeQueue(){
         return new Queue("demo-queue",true);
     }
 
+    @Bean
+    @Profile({"dispatcher"})
+    public Queue dispatcherQueue(){
+        return new Queue("dispatcher-queue",true);
+    }
+
     // RabbitTemplate 설정
     @Bean
+    @Profile({"rabbitmq","dispatcher"})
     RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
@@ -40,6 +48,7 @@ public class RabbitConfig {
 
     // Spring Boot가 Jackson 라이브러리를 사용해 메시지를 JSON으로 자동 변환하도록 설정
     @Bean
+    @Profile({"rabbitmq","dispatcher"})
     MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
