@@ -3,6 +3,7 @@ package kr.co.aim.api.application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.aim.api.dto.request.BaseMessage;
 import com.fasterxml.jackson.core.type.TypeReference;
+import kr.co.aim.common.enums.MessageList;
 import kr.co.aim.common.format.AreYouThereBody;
 import kr.co.aim.common.format.Header;
 import kr.co.aim.common.handler.MessageHandler;
@@ -23,7 +24,7 @@ public class AreYouThereRequestHandler implements MessageHandler<String> {
 
     @Override
     public String getSupportedMessageName() {
-        return "AreYouThereRequest";
+        return MessageList.ARE_YOU_THERE_REQUEST.getMessageName();
     }
 
     @Override

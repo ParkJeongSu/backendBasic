@@ -1,5 +1,6 @@
 package kr.co.aim.api.web.controller;
 
+import kr.co.aim.common.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.listener.MessageListenerContainer;
@@ -25,7 +26,7 @@ public class ControlController {
 
     @PostMapping("/stop")
     public String stop() {
-
+        log.info(UserRole.USER.toString());
         System.out.println("애플리케이션 종료 작업 시작...");
 
         // 1. 모든 리스너 컨테이너의 메시지 소비 중단

@@ -7,4 +7,10 @@ public final class CacheConstants {
 
     public static final String USER_CACHE_NAME = "users";
     public static final int DEFAULT_TTL_SECONDS = 3600; // 1시간
+
+
+    /*
+    * MessageName List
+    * */
+    public static final String t = "3600"; // 1시간
 }
