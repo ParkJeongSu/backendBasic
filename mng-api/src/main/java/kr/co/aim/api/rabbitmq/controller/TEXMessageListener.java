@@ -2,9 +2,9 @@ package kr.co.aim.api.rabbitmq.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.aim.api.dto.request.MessageHeader;
-import kr.co.aim.api.service.RouterService;
-import kr.co.aim.common.handler.MessageHandler;
 import kr.co.aim.api.rabbitmq.controller.dispatcher.MessageDispatcher;
+import kr.co.aim.common.handler.MessageHandler;
+import kr.co.aim.infra.config.RabbitConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile({"rabbitmq","dispatcher"})
-public class GenericMessageListener {
+@Profile({"pex","tex","dispatcher"})
+public class TEXMessageListener {
 
     private final MessageDispatcher messageDispatcher;
-    private final RouterService routerService;
     private final ObjectMapper objectMapper;
 
-    @RabbitListener(id = "demoListener",queues="demo-queue")
+    @RabbitListener(id = "tex-Listener",queues= RabbitConfig.TEX_REQUEST_QUEUE_NAME)
     @SneakyThrows
     public Object recevie(String message) {
         log.info("Received raw message: {}", message);

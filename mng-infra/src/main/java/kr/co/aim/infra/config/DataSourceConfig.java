@@ -17,7 +17,7 @@ public class DataSourceConfig {
     @Bean(name = "mssqlDataSource")
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
-    @Profile({"rabbitmq","dispatcher","scheduler"})
+    @Profile({"pex","tex","dispatcher","scheduler"})
     public DataSource mssqlDataSource() {
         return DataSourceBuilder.create().build();
     }

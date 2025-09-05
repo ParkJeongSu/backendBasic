@@ -4,7 +4,7 @@ spring:
   application:
     name: mng
   profiles:
-    active: scheduler # 또는 rabbitmq | scheduler,rabbitmq | dispatcher 등으로 설정 가능
+    active: pex # 또는 rabbitmq | scheduler,rabbitmq | dispatcher 등으로 설정 가능
   datasource:
     jdbc-url: jdbc:sqlserver://localhost:1433;databaseName=myprojecttest;encrypt=false;
     username: sa
@@ -33,7 +33,7 @@ logging:
 spring:
   config:
     activate:
-      on-profile: rabbitmq
+      on-profile: pex,tex,dispatcher
   rabbitmq:
     host: localhost
     port: 5672

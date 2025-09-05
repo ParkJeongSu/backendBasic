@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Aspect
 @Component
-@Profile({"rabbitmq","dispatcher"})
+@Profile({"pex","tex","dispatcher"})
 public class RabbitMQAspect {
 
     // 1. @RabbitListener 어노테이션이 달린 모든 메서드를 Pointcut으로 지정
