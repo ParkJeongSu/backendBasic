@@ -1,0 +1,19 @@
+package kr.co.aim.domain.model;
+
+
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA Entity 등을 위한 기본 생성자
+@AllArgsConstructor
+@ToString
+public class Carriers {
+
+    private Long id;
+    private String carrierCode;
+    private boolean reserved;
+    private boolean error;
+
+
+}

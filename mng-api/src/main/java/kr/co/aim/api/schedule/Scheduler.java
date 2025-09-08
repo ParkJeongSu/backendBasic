@@ -23,6 +23,6 @@ public class Scheduler {
     public void transferData() {
         log.info("⏰ 스케줄러가 데이터를 전송합니다.");
         // 여기에 데이터베이스 연동 로직을 추가할 예정입니다.
-        // dataTransferService.transferUsersToDb2();
+         dataTransferService.transferUsersToDb2();
     }
 }

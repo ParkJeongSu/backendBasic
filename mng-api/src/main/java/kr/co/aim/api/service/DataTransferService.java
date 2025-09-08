@@ -40,8 +40,9 @@ public class DataTransferService {
                         ps.setString(2, user.getUsername());
                         ps.setString(3, user.getEmail());
                     });
-
+            log.info("Successfully transferred {} users to DB2.", batchInsertResult.length);
         } catch (Exception e) {
+            log.info("exception logic start");
             Throwable t = e;
             while (t != null) {
                 if (t instanceof java.sql.SQLException se) {
@@ -56,6 +57,6 @@ public class DataTransferService {
         }
 
 
-        //log.info("Successfully transferred {} users to DB2.", batchInsertResult.length);
+
     }
 }
