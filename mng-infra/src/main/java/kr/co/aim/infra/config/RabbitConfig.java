@@ -1,5 +1,7 @@
 package kr.co.aim.infra.config;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -9,6 +11,8 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
+import java.util.Map;
 
 @Configuration
 public class RabbitConfig {
@@ -22,30 +26,59 @@ public class RabbitConfig {
     public static final String TEX_ROUTING_KEY = "TEX.key";
     public static final String DISPATCHER_ROUTING_KEY = "DISPATCHER.key";
 
-    // Exchange 빈 등록
+    public static final String DEAD_LETTER_QUEUE = "DEAD.request.queue";
+    public static final String DEAD_LETTER_EXCHANGE_NAME = "dead.exchange";
+
+    // 1. DLQ와 DLX 빈 등록
     @Bean
-    @Profile({"pex","tex","dispatcher"})
-    DirectExchange exchange() {
-        return new DirectExchange(RPC_EXCHANGE_NAME);
+    public Queue deadLetterQueue() {
+        return new Queue(DEAD_LETTER_QUEUE, true);
+    }
+
+    @Bean
+    public DirectExchange deadLetterExchange() {
+        return new DirectExchange(DEAD_LETTER_EXCHANGE_NAME);
+    }
+
+    // 2. DLQ 바인딩
+    @Bean
+    Binding deadLetterBinding(Queue deadLetterQueue, DirectExchange deadLetterExchange) {
+        return BindingBuilder.bind(deadLetterQueue).to(deadLetterExchange).with(DEAD_LETTER_QUEUE);
     }
 
     @Bean
     @Profile({"pex","tex","dispatcher"})
     public Queue pexQueue(){
-        return new Queue(PEX_REQUEST_QUEUE_NAME,true);
+        return new Queue(PEX_REQUEST_QUEUE_NAME,true,false,false,
+                Map.of("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE_NAME,
+                        "x-dead-letter-routing-key", DEAD_LETTER_QUEUE)
+        );
     }
 
 
     @Bean
     @Profile({"pex","tex","dispatcher"})
     public Queue texQueue(){
-        return new Queue(TEX_REQUEST_QUEUE_NAME,true);
+        return new Queue(TEX_REQUEST_QUEUE_NAME,true,false,false,
+                Map.of("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE_NAME,
+                        "x-dead-letter-routing-key", DEAD_LETTER_QUEUE)
+        );
     }
 
     @Bean
     @Profile({"pex","tex","dispatcher"})
     public Queue dispatcherQueue(){
-        return new Queue(DISPATCHER_REQUEST_QUEUE_NAME,true);
+        return new Queue(DISPATCHER_REQUEST_QUEUE_NAME,true,false,false,
+                Map.of("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE_NAME,
+                        "x-dead-letter-routing-key", DEAD_LETTER_QUEUE)
+        );
+    }
+
+    // Exchange 빈 등록
+    @Bean
+    @Profile({"pex","tex","dispatcher"})
+    DirectExchange exchange() {
+        return new DirectExchange(RPC_EXCHANGE_NAME);
     }
 
     // RabbitTemplate 설정

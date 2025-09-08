@@ -6,6 +6,7 @@ import kr.co.aim.api.rabbitmq.controller.dispatcher.MessageDispatcher;
 import kr.co.aim.api.service.RouterService;
 import kr.co.aim.common.enums.MessageList;
 import kr.co.aim.common.enums.UserRole;
+import kr.co.aim.common.error.sampleError;
 import kr.co.aim.common.handler.MessageHandler;
 import kr.co.aim.infra.config.RabbitConfig;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,11 @@ public class RouterMessageListener {
                     "ef"
             );
 
-    @RabbitListener(id = "dispatcher-Listener",queues= RabbitConfig.DISPATCHER_REQUEST_QUEUE_NAME, concurrency = "10")
+    @RabbitListener(id = "dispatcher-Listener",
+            queues= RabbitConfig.DISPATCHER_REQUEST_QUEUE_NAME,
+            concurrency = "10",
+            containerFactory = "rabbitListenerContainerFactory"
+    )
     @SneakyThrows
     public void recevieDispatcher(String message) {
 
@@ -48,6 +53,11 @@ public class RouterMessageListener {
         MessageHeader messageHeader = objectMapper.readValue(message, MessageHeader.class);
         String messageName = messageHeader.getHeader().getMessageName();
         log.info("messageName : {}", messageName);
+
+        if(true)
+        {
+            throw new sampleError();
+        }
 
         routerService.routePEXMessage(message);
         /*

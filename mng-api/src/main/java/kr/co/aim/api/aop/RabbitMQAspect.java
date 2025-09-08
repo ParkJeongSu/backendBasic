@@ -1,6 +1,7 @@
 package kr.co.aim.api.aop;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Aspect
 @Component
 @Profile({"pex","tex","dispatcher"})
+@Slf4j
 public class RabbitMQAspect {
 
     // 1. @RabbitListener 어노테이션이 달린 모든 메서드를 Pointcut으로 지정
@@ -32,6 +34,10 @@ public class RabbitMQAspect {
 
             // 4. 원래의 @RabbitListener 메서드 실행
             return joinPoint.proceed();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            // 추가적으로 로그 더 기록
+            throw e;
         }
         finally {
             // 5. (가장 중요) 메서드 실행이 끝나면 반드시 MDC를 비워줍니다.

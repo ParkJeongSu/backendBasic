@@ -21,7 +21,12 @@ public class PEXMessageListener {
     private final MessageDispatcher messageDispatcher;
     private final ObjectMapper objectMapper;
 
-    @RabbitListener(id = "pex-Listener",queues= RabbitConfig.PEX_REQUEST_QUEUE_NAME)
+    @RabbitListener(
+            id = "pex-Listener",
+            queues= RabbitConfig.PEX_REQUEST_QUEUE_NAME,
+            concurrency = "10",
+            containerFactory = "rabbitListenerContainerFactory"
+    )
     @SneakyThrows
     public Object recevie(String message) {
         log.info("Received raw message: {}", message);
