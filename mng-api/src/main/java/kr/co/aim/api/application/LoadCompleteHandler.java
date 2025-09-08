@@ -29,7 +29,14 @@ public class LoadCompleteHandler implements MessageHandler<String> {
         // TypeReference<BaseMessage<AreYouThereBody>> typeRef = new TypeReference<>() {};
         // BaseMessage<AreYouThereBody> request = objectMapper.readValue(message, typeRef);
         log.info("✅ Handling Message request: {}", message);
-
+        int sum=0;
+        for(int i=0;i<7000000;i++)
+        {
+            System.out.println("for 문 수행"+ i);
+            sum+=1;
+        }
+        log.info("gracefulShutdown test Logic");
+        log.info("sum cal end");
         // 2. 해당 비즈니스 로직 호출
         // 서비스 호출
         

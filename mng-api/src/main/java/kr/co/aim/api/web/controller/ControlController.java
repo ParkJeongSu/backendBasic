@@ -26,19 +26,21 @@ public class ControlController {
 
     @PostMapping("/stop")
     public String stop() {
-        log.info(UserRole.USER.toString());
         System.out.println("애플리케이션 종료 작업 시작...");
-
+        log.info("애플리케이션 종료 작업 시작...");
         // 1. 모든 리스너 컨테이너의 메시지 소비 중단
         System.out.println("모든 리스너 컨테이너 종료 명령...");
+        log.info("모든 리스너 컨테이너 종료 명령...");
         for (MessageListenerContainer container : registry.getListenerContainers()) {
             if (container.isRunning()) {
+                log.info("container stop 명령시작");
                 container.stop(new StopRunnable()); // 논블로킹, 현재 메시지 처리 후 종료
             }
         }
 
         // 2. 현재 처리 중인 메시지들이 완료될 때까지 대기 (30초)
         System.out.println("현재 처리 중인 메시지 완료를 위해 30초 대기...");
+        log.info("현재 처리 중인 메시지 완료를 위해 30초 대기시작...");
         try {
             Thread.sleep(30_000);
         } catch (InterruptedException e) {
@@ -46,7 +48,7 @@ public class ControlController {
         }
 
         System.out.println("모든 리스너 컨테이너가 종료되었습니다.");
-
+        log.info("모든 리스너 컨테이너가 종료되었습니다.");
         // 비동기로 종료
         new Thread(() -> {
             try {

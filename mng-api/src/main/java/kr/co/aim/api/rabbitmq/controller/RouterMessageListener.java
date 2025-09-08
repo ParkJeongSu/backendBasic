@@ -54,10 +54,10 @@ public class RouterMessageListener {
         String messageName = messageHeader.getHeader().getMessageName();
         log.info("messageName : {}", messageName);
 
-        if(true)
-        {
-            throw new sampleError();
-        }
+//        if(true)
+//        {
+//            throw new sampleError();
+//        }
 
         routerService.routePEXMessage(message);
         /*

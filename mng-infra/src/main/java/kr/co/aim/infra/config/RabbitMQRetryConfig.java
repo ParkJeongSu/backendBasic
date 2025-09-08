@@ -23,11 +23,12 @@ public class RabbitMQRetryConfig {
 
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
-
         // --- 이 부분을 추가하세요 ---
         // 예외 발생 시 메시지를 큐에 다시 넣지 않도록 설정
         factory.setDefaultRequeueRejected(false);
-
+        factory.setContainerCustomizer(
+                c-> c.setShutdownTimeout(60_000L)
+        );
         factory.setAdviceChain(retryInterceptor());
 
         return factory;
