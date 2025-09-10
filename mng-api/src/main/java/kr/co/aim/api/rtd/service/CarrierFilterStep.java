@@ -1,5 +1,6 @@
 package kr.co.aim.api.rtd.service;
 
+import kr.co.aim.domain.model.CarrierAndCarrierDef;
 import kr.co.aim.domain.model.Carriers;
 import kr.co.aim.common.rule.AbstractRuleStep;
 import org.springframework.stereotype.Service;
@@ -8,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CarrierFilterStep extends AbstractRuleStep<Carriers> {
+public class CarrierFilterStep extends AbstractRuleStep<CarrierAndCarrierDef,CarrierAndCarrierDef> {
 
     @Override
-    protected List<Carriers> process(List<Carriers> input) {
+    protected List<CarrierAndCarrierDef> process(List<CarrierAndCarrierDef> input) {
 
-        List<Carriers> filtered = new ArrayList<>();
-        for (Carriers c : input) {
+        List<CarrierAndCarrierDef> filtered = new ArrayList<>();
+        for (CarrierAndCarrierDef c : input) {
             if (!c.isReserved() && !c.isError()) {
                 filtered.add(c);
             }

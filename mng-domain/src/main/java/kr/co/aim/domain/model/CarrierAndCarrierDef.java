@@ -8,10 +8,14 @@ import lombok.*;
 @NoArgsConstructor//(access = AccessLevel.PROTECTED) // JPA Entity 등을 위한 기본 생성자
 @AllArgsConstructor
 @ToString
-public class Carriers {
+@Builder
+public class CarrierAndCarrierDef {
+
     private Long id;
     private String carrierCode;
     private boolean reserved;
     private boolean error;
-    private Long carrierDefId;
+    private String carrierDefName;
+    private String carrierType;
+    private String carrierType2;
 }

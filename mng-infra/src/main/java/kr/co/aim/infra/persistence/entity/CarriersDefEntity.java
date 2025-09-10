@@ -1,22 +1,18 @@
 package kr.co.aim.infra.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "carriers")
+@Table(name = "carrierdef")
 @NoArgsConstructor
-public class CarriersEntity {
+public class CarriersDefEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String carrierCode;
-    private boolean reserved;
-    private boolean error;
-    private Long carrierDefId;
-
-
+    private String carrierDefName;
+    private String carrierType;
+    private String carrierType2;
 }

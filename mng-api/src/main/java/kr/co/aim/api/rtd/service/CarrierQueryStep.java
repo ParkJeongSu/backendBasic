@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CarrierQueryStep extends AbstractRuleStep<Carriers> {
+public class CarrierQueryStep extends AbstractRuleStep<Void,Carriers> {
 
     private final CarrierRepository carrierRepository;
 
@@ -17,7 +17,7 @@ public class CarrierQueryStep extends AbstractRuleStep<Carriers> {
     }
 
     @Override
-    protected List<Carriers> process(List<Carriers> input) {
+    protected List<Carriers> process(List<Void> input) {
         return carrierRepository.findAll();  // 또는 조건 조회
     }
 

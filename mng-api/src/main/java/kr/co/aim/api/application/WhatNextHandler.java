@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.aim.api.rtd.service.WhatNextService;
 import kr.co.aim.common.enums.MessageList;
 import kr.co.aim.common.handler.MessageHandler;
+import kr.co.aim.domain.model.CarrierAndCarrierDef;
 import kr.co.aim.domain.model.Carriers;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -36,7 +37,7 @@ public class WhatNextHandler implements MessageHandler<String> {
 
         // 2. 해당 비즈니스 로직 호출
         // 서비스 호출
-        Carriers carriers = whatNextService.execute();
+        CarrierAndCarrierDef carriers = whatNextService.execute();
         log.info("carriers data : {}",carriers);
         
         // 3. 만일 서비스 호출 후 메시지 송신해야하면 이 부분에서 reply 메시지 생성

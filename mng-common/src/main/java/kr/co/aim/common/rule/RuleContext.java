@@ -10,11 +10,10 @@ import java.util.Map;
 @Getter
 @Setter
 public class RuleContext<T> {
-    List<T> input;
+    List<T> previous;
     List<T> output;
     String description;
-    int stepNumber;
+    int stepNumber; // historyList 에 순서대로 넣고 있음
     String transactionId;
     Map<String, Object> meta = new HashMap<>();
-    List<ConditionTrace<T>> traceLog = new ArrayList<>();  // ⭐ 추가
 }

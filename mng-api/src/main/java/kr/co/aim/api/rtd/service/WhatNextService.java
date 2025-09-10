@@ -1,5 +1,7 @@
 package kr.co.aim.api.rtd.service;
 
+import kr.co.aim.domain.model.CarrierAndCarrierDef;
+import kr.co.aim.domain.model.CarrierDef;
 import kr.co.aim.domain.model.Carriers;
 import kr.co.aim.common.rule.RuleContext;
 import kr.co.aim.common.rule.RuleStep;
@@ -16,27 +18,39 @@ import java.util.List;
 public class WhatNextService {
     //private final HistoryLogService historyLogService;
     private final CarrierQueryStep carrierQueryStep;
+    private final CarrierDefQueryStep carrierDefQueryStep;
+    private final CarrierAndCarrierDefJoinStep carrierAndCarrierDefJoinStep;
     private final CarrierFilterStep carrierFilterStep;
     private final CarrierSortStep carrierSortStep;
     private final CarrierFilterLastOneStep carrierFilterLastOneStep;
 
+    public CarrierAndCarrierDef execute() throws IOException {
 
-
-    public Carriers execute() throws IOException {
-
-        List<RuleStep<Carriers>> steps = List.of(
-                carrierQueryStep,
+        List<RuleStep<CarrierAndCarrierDef,CarrierAndCarrierDef>> steps = List.of(
                 carrierFilterStep,
                 carrierSortStep,
                 carrierFilterLastOneStep
         );
 
-        RuleContext<Carriers> context = new RuleContext<>();
-        List<RuleContext<Carriers>> history = new ArrayList<>();
+        List<RuleContext<?>> history = new ArrayList<>(); // 모든 컨텍스트 기록
 
-        for (RuleStep<Carriers> step : steps) {
-            context = step.apply(context);
-            history.add(context);
+        // 1. Carrier 데이터 조회
+        RuleContext<Carriers> carrierContext = carrierQueryStep.apply(null);
+        history.add(carrierContext);
+
+        // 2. CarrierDef 데이터 조회
+        RuleContext<CarrierDef> carrierDefContext = carrierDefQueryStep.apply(null);
+        history.add(carrierDefContext);
+
+        // 3. 두 데이터 조인
+        RuleContext<CarrierAndCarrierDef> carrierDefRuleContext = carrierAndCarrierDefJoinStep.apply(carrierContext,carrierDefContext);
+        history.add(carrierDefRuleContext);
+
+        RuleContext<CarrierAndCarrierDef> currentContext = carrierDefRuleContext;
+
+        for (RuleStep<CarrierAndCarrierDef,CarrierAndCarrierDef> step : steps) {
+            currentContext = step.apply(currentContext);
+            history.add(currentContext);
         }
 
         //String transactionId = (new Timestamp(System.currentTimeMillis())).toString();
@@ -44,6 +58,6 @@ public class WhatNextService {
 
         // 최종 결과는 context.output.get(0)
         // history는 추후 OpenSearch 저장 또는 Vue 디버깅용으로 사용
-        return context.getOutput().get(0);
+        return currentContext.getOutput().get(0);
     }
 }
