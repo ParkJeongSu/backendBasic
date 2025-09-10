@@ -1,15 +1,14 @@
 package kr.co.aim.api.rtd.service;
 
+import kr.co.aim.common.rule.RuleContext;
+import kr.co.aim.common.rule.RuleStep;
 import kr.co.aim.domain.model.CarrierAndCarrierDef;
 import kr.co.aim.domain.model.CarrierDef;
 import kr.co.aim.domain.model.Carriers;
-import kr.co.aim.common.rule.RuleContext;
-import kr.co.aim.common.rule.RuleStep;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
