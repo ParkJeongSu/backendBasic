@@ -17,7 +17,7 @@ public class HistoryEventListener {
 
     @EventListener
     public void handleAlarmHistory(AlarmHistoryEvent event) {
-        log.info("Recording history for Alarm ID: {}", event.getAlarm().getId());
+//        log.info("Recording history for Alarm ID: {}", event.getAlarm().getId());
         Alarm alarm = event.getAlarm();
 
         // History Entity 생성

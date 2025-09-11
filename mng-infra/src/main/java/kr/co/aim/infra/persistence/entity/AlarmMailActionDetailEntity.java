@@ -1,26 +1,26 @@
 package kr.co.aim.infra.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
 @Getter
 @AllArgsConstructor
-@Table(name = "ALARM")
+@Table(name = "ALARM_MAIL_ACTION_DETAIL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA를 위한 기본 생성자
-public class AlarmEntity {
+public class AlarmMailActionDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long alarmDefId;
-    private Long equipmentId;
-    private String alarmState;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createTime;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date clearTime;
+    private Long alarmActionId;
+    private Long alarmActionUserGroupId;
+    private String subject;
+    private String contents;
     private String eventName;
     private String timeKey;
     @Temporal(TemporalType.TIMESTAMP)

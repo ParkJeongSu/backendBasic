@@ -24,10 +24,10 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
 
     // ============== [확인용 코드 추가] ==============
-//    @PostConstruct
-//    public void checkProxy() {
-//        log.info("### Injected AlarmRepository Class: {}", alarmRepository.getClass().getName());
-//    }
+    //    @PostConstruct
+    //    public void checkProxy() {
+    //        log.info("### Injected AlarmRepository Class: {}", alarmRepository.getClass().getName());
+    //    }
     // ===============================================
 
     /**
@@ -58,6 +58,7 @@ public class AlarmService {
         // 있다면 변경한다.
 
         // 도메인 객체를 찾거나, 없으면 새로 생성해서 로직을 위임
+        // TODO: 현재는 equipmentId 에 1L 강제 하드코딩 equipemts 테이블이 생성됨에 따라 해당 로직 수정
         Alarm alarm = alarmRepository.findByAlarmDefIdAndEquipmentId(alarmDef.getId(),1L)
             .map(existingAlarm -> {
                 existingAlarm.updateAlarm(message); // 2. 기존 알람에 상태 변경을 위임
@@ -68,5 +69,7 @@ public class AlarmService {
         // @Transactional 어노테이션의 '변경 감지(Dirty Checking)' 기능 덕분에
         // 이 save 호출은 사실 생략 가능할 때도 있지만, 명시적으로 호출하는 것이 좋습니다.
         alarmRepository.save(alarm);
+
+        // TODO: Alarm Action 현재 Alarm Action이 users 테이블이 없어서 강제로 유저 하드코딩 중 추후 수정
     }
 }
