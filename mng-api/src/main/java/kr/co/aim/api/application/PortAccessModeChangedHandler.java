@@ -1,11 +1,12 @@
 package kr.co.aim.api.application;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.aim.api.rtd.service.WhatNextService;
+import kr.co.aim.api.service.AlarmService;
 import kr.co.aim.common.enums.MessageList;
+import kr.co.aim.common.format.AlarmReportBody;
+import kr.co.aim.common.format.request.BaseMessage;
 import kr.co.aim.common.handler.MessageHandler;
-import kr.co.aim.domain.model.CarrierAndCarrierDef;
-import kr.co.aim.domain.model.Carriers;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,30 +16,28 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class WhatNextHandler implements MessageHandler<String> {
+public class PortAccessModeChangedHandler implements MessageHandler<String> {
 
     private final ObjectMapper objectMapper;
     private final RabbitTemplate rabbitTemplate;
-    private final WhatNextService whatNextService;
+    private final AlarmService alarmService;
 
     @Override
     public String getSupportedMessageName() {
-
-        return MessageList.WHAT_NEXT.getMessageName();
+        return MessageList.PORT_ACCESS_MODE_CHANGED.getMessageName();
     }
 
     @Override
     @SneakyThrows // objectMapper의 예외 처리를 간소화
     public Object handle(String message) {
         // 1. 자신에게 맞는 DTO로 역직렬화
-        // TypeReference<BaseMessage<AreYouThereBody>> typeRef = new TypeReference<>() {};
-        // BaseMessage<AreYouThereBody> request = objectMapper.readValue(message, typeRef);
+        TypeReference<BaseMessage<AlarmReportBody>> typeRef = new TypeReference<>() {};
+        BaseMessage<AlarmReportBody> requestMessage = objectMapper.readValue(message, typeRef);
         log.info("✅ Handling Message request: {}", message);
 
         // 2. 해당 비즈니스 로직 호출
         // 서비스 호출
-        CarrierAndCarrierDef carriers = whatNextService.execute();
-        log.info("carriers data : {}",carriers);
+        alarmService.alarmReport(requestMessage);
         
         // 3. 만일 서비스 호출 후 메시지 송신해야하면 이 부분에서 reply 메시지 생성
         // reply 객체 정의

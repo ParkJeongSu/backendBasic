@@ -47,11 +47,13 @@ public enum MessageList {
     CARRIER_CLEAN_JOB_ENDED("CarrierCleanJobEnded"),
     CARRIER_VALIDATION_REQUEST("CarrierValidationRequest"),
     CARRIER_VALIDATION_REPLY("CarrierValidationReply"),
-    CARRIER_DEASSIGNED("CarrierDeassigned"),
+    CARRIER_UNASSIGNED("CarrierUnassigned"),
     PROCESS_JOB_STARTED("ProcessJobStarted"),
     PROCESS_JOB_ABORTED("ProcessJobAborted"),
     PROCESS_JOB_DATA_REPORT("ProcessJobDataReport"),
-    PROCESS_JOB_ENDED("ProcessJobEnded");
+    PROCESS_JOB_ENDED("ProcessJobEnded"),
+    WHAT_NEXT("WhatNext"),
+    WHERE_NEXT("WhereNext");
 
 
     private final String messageName;

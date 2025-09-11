@@ -9,6 +9,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.ERROR
+        // builder = @Builder(disableBuilder = true)  <- 이 라인을 삭제
 )
 public interface CarrierDefMapper {
 

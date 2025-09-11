@@ -35,30 +35,31 @@ public class AreYouThereRequestHandler implements MessageHandler<String> {
         log.info("✅ Handling CreateUser request: {}", message);
 
         // 2. 해당 비즈니스 로직 호출
-        //Object user = userService.createUser(request);
+        // AreYouThereRequest 는 단순히 로그
         log.info("machineName : {}", request.getBody().getMachineName());
         
-        // 3. 메시지 송신
+        // 3. 메시지 송신 객체 생성
         BaseMessage<AreYouThereBody> reply = new BaseMessage<>();
-        Header header = Header.builder().messageName("AreYouThereReply")
-                .eventComment("test")
-                .eventUser("pjs")
+        Header header = Header.builder().messageName(MessageList.ARE_YOU_THERE_REPLY.getMessageName())
+                .eventComment(request.getHeader().getEventComment())
+                .eventUser("MNG")
                 .version("1.0")
-                .replyQueueName("abc")
+                .replyQueueName("")
                 .timestamp("test")
-                .transactionId("123")
+                .transactionId(request.getHeader().getTransactionId())
                 .build();
         AreYouThereBody body = AreYouThereBody.
                 builder()
-                .machineName("machine1")
+                .machineName(request.getBody().getMachineName())
                 .build();
         request.setHeader(header);
         request.setBody(body);
 
         // 3. DTO 객체를 JSON 문자열로 직접 변환합니다.
         String jsonPayload = objectMapper.writeValueAsString(request);
+        log.info("Sending JSON Payload: " + jsonPayload);
 
-        System.out.println("Sending JSON Payload: " + jsonPayload);
+        // 4. Message Reply
         rabbitTemplate.convertAndSend(
                 "demo-queue",
                 jsonPayload

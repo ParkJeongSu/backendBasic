@@ -5,7 +5,6 @@ import kr.co.aim.api.rtd.service.WhatNextService;
 import kr.co.aim.common.enums.MessageList;
 import kr.co.aim.common.handler.MessageHandler;
 import kr.co.aim.domain.model.CarrierAndCarrierDef;
-import kr.co.aim.domain.model.Carriers;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class WhatNextHandler implements MessageHandler<String> {
+public class WhereNextHandler implements MessageHandler<String> {
 
     private final ObjectMapper objectMapper;
     private final RabbitTemplate rabbitTemplate;
@@ -24,7 +23,7 @@ public class WhatNextHandler implements MessageHandler<String> {
     @Override
     public String getSupportedMessageName() {
 
-        return MessageList.WHAT_NEXT.getMessageName();
+        return MessageList.WHERE_NEXT.getMessageName();
     }
 
     @Override
