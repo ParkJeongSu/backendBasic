@@ -1,0 +1,94 @@
+package kr.co.aim.api.service;
+
+import kr.co.aim.api.dto.request.BaseMessage;
+import kr.co.aim.common.format.AlarmReportBody;
+import kr.co.aim.domain.model.Alarm;
+import kr.co.aim.domain.model.AlarmDef;
+import kr.co.aim.domain.repository.AlarmDefRepository;
+import kr.co.aim.domain.repository.AlarmRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor // final 필드에 대한 생성자를 자동으로 만들어줍니다. (DI)
+@Slf4j
+public class AlarmService {
+
+    private final AlarmDefRepository alarmDefRepository; // 구현체(Infra)가 아닌 인터페이스(Domain)에 의존
+    private final AlarmRepository alarmRepository;
+
+
+
+    /**
+     * 알람을 기록합니다.
+     * 1. 알람 정의 find by AlarmCode
+     * 만일 알람 정의가 없다면 종료
+     * <p>
+     * 2. 설비id 와 alarmCode 로 Alarm find
+     * 만일 없다면, 생성
+     * 있다면, 변경
+     *
+     * @param message 받은 메시지
+     */
+    @Transactional // 이 메소드가 하나의 트랜잭션으로 동작하도록 보장합니다.
+    public void alarmReport(BaseMessage<AlarmReportBody> message) {
+        // 1. alarmDefRepository 통해 AlarmDef Domain 객체를 가져온다.
+        Optional<AlarmDef> alarmDefOptional = alarmDefRepository.findByAlarmCodeName(message.getBody().getAlarmCode());
+        if(alarmDefOptional.isEmpty())
+        {
+            log.info("alarm Def not Exists");
+            return;
+        }
+        AlarmDef alarmDef = alarmDefOptional.get();
+
+        // 2. AlarmDefId 와 설비Id를 통해  Optional<Alarm> alarm 을 찾는다.
+        // 위 데이터는 없을수도 있고 있을수도 있음
+        // 만일 없다면, 생성
+        // 있다면 변경한다.
+
+        Optional<Alarm> alarmOptional = alarmRepository.findByAlarmDefIdAndEquipmentId(alarmDef.getId(),1L);
+        Alarm alarm = null;
+        Date currnetDate = new Date();
+        if(alarmOptional.isEmpty())
+        {
+            alarm = Alarm.builder()
+                    .alarmDefId(alarmDef.getId())
+                    .equipmentId(1L)
+                    .alarmState(message.getBody().getAlarmState())
+                    .createTime(currnetDate)
+                    //.clearTime()
+                    .eventName(message.getHeader().getMessageName())
+                    .eventTime(currnetDate)
+                    .timeKey(message.getHeader().getTransactionId())
+                    .eventUser(message.getHeader().getEventUser())
+                    .eventComment(message.getHeader().getEventComment()).
+                    build();
+        }
+        else
+        {
+            alarm = alarmOptional.get();
+            alarm.setAlarmState(message.getBody().getAlarmState());
+            if(message.getBody().getAlarmState().equals("issue")) {
+                alarm.setCreateTime(currnetDate);
+            }
+            else{
+                alarm.setClearTime(currnetDate);
+            }
+            alarm.setEventName(message.getHeader().getMessageName());
+            alarm.setEventTime(currnetDate);
+            alarm.setTimeKey(message.getHeader().getTransactionId());
+            alarm.setEventUser(message.getHeader().getEventUser());
+            alarm.setEventComment(message.getHeader().getEventComment());
+        }
+
+        // 3. Repository를 통해 변경된 Domain 객체를 저장한다.
+        // @Transactional 어노테이션의 '변경 감지(Dirty Checking)' 기능 덕분에
+        // 이 save 호출은 사실 생략 가능할 때도 있지만, 명시적으로 호출하는 것이 좋습니다.
+        alarmRepository.save(alarm);
+    }
+}

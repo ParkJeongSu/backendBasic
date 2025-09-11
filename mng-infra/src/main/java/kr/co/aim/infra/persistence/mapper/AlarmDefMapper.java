@@ -1,7 +1,7 @@
 package kr.co.aim.infra.persistence.mapper;
 
-import kr.co.aim.domain.model.CarrierDef;
-import kr.co.aim.infra.persistence.entity.CarriersDefEntity;
+import kr.co.aim.domain.model.AlarmDef;
+import kr.co.aim.infra.persistence.entity.AlarmDefEntity;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -10,9 +10,9 @@ import org.mapstruct.ReportingPolicy;
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.ERROR
 )
-public interface CarrierDefMapper {
+public interface AlarmDefMapper {
 
-    CarrierDef toDomain(CarriersDefEntity entity);
+    AlarmDef toDomain(AlarmDefEntity entity);
 
-    CarriersDefEntity toEntity(CarrierDef domain);
+    AlarmDefEntity toEntity(AlarmDef domain);
 }
