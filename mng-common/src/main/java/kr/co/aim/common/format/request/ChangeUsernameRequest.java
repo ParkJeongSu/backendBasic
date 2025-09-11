@@ -1,4 +1,4 @@
-package kr.co.aim.api.dto.request;
+package kr.co.aim.common.format.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

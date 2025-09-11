@@ -1,4 +1,4 @@
-package kr.co.aim.api.dto.request;
+package kr.co.aim.common.format.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

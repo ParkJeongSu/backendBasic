@@ -1,7 +1,7 @@
 package kr.co.aim.api.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.aim.api.dto.request.BaseMessage;
+import kr.co.aim.common.format.request.BaseMessage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import kr.co.aim.common.enums.MessageList;
 import kr.co.aim.common.format.AreYouThereBody;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Slf4j

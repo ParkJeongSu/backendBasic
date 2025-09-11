@@ -1,13 +1,9 @@
 package kr.co.aim.api.rabbitmq.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.aim.api.dto.request.MessageHeader;
-import kr.co.aim.api.rabbitmq.controller.dispatcher.MessageDispatcher;
+import kr.co.aim.common.format.request.MessageHeader;
 import kr.co.aim.api.service.RouterService;
 import kr.co.aim.common.enums.MessageList;
-import kr.co.aim.common.enums.UserRole;
-import kr.co.aim.common.error.sampleError;
-import kr.co.aim.common.handler.MessageHandler;
 import kr.co.aim.infra.config.RabbitConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -16,7 +12,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j

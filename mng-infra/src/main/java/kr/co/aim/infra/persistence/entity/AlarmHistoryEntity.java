@@ -10,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "ALARM_HISTORY")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA를 위한 기본 생성자
+@Builder
 public class AlarmHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

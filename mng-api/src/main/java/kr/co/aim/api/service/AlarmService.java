@@ -1,6 +1,6 @@
 package kr.co.aim.api.service;
 
-import kr.co.aim.api.dto.request.BaseMessage;
+import kr.co.aim.common.format.request.BaseMessage;
 import kr.co.aim.common.format.AlarmReportBody;
 import kr.co.aim.domain.model.Alarm;
 import kr.co.aim.domain.model.AlarmDef;
@@ -51,40 +51,12 @@ public class AlarmService {
         // 만일 없다면, 생성
         // 있다면 변경한다.
 
-        Optional<Alarm> alarmOptional = alarmRepository.findByAlarmDefIdAndEquipmentId(alarmDef.getId(),1L);
-        Alarm alarm = null;
-        Date currnetDate = new Date();
-        if(alarmOptional.isEmpty())
-        {
-            alarm = Alarm.builder()
-                    .alarmDefId(alarmDef.getId())
-                    .equipmentId(1L)
-                    .alarmState(message.getBody().getAlarmState())
-                    .createTime(currnetDate)
-                    //.clearTime()
-                    .eventName(message.getHeader().getMessageName())
-                    .eventTime(currnetDate)
-                    .timeKey(message.getHeader().getTransactionId())
-                    .eventUser(message.getHeader().getEventUser())
-                    .eventComment(message.getHeader().getEventComment()).
-                    build();
-        }
-        else
-        {
-            alarm = alarmOptional.get();
-            alarm.setAlarmState(message.getBody().getAlarmState());
-            if(message.getBody().getAlarmState().equals("issue")) {
-                alarm.setCreateTime(currnetDate);
-            }
-            else{
-                alarm.setClearTime(currnetDate);
-            }
-            alarm.setEventName(message.getHeader().getMessageName());
-            alarm.setEventTime(currnetDate);
-            alarm.setTimeKey(message.getHeader().getTransactionId());
-            alarm.setEventUser(message.getHeader().getEventUser());
-            alarm.setEventComment(message.getHeader().getEventComment());
-        }
+        // 도메인 객체를 찾거나, 없으면 새로 생성해서 로직을 위임
+        Alarm alarm = alarmRepository.findByAlarmDefIdAndEquipmentId(alarmDef.getId(),1L)
+            .map(existingAlarm -> {
+                existingAlarm.updateAlarm(message); // 2. 기존 알람에 상태 변경을 위임
+                return existingAlarm;
+            }).orElseGet(() -> Alarm.issue(alarmDef.getId(), 1L, message)); // 1. 새 알람 생성을 위임
 
         // 3. Repository를 통해 변경된 Domain 객체를 저장한다.
         // @Transactional 어노테이션의 '변경 감지(Dirty Checking)' 기능 덕분에

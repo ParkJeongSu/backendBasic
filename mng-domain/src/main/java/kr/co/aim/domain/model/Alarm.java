@@ -1,5 +1,7 @@
 package kr.co.aim.domain.model;
 
+import kr.co.aim.common.format.AlarmReportBody;
+import kr.co.aim.common.format.request.BaseMessage;
 import lombok.*;
 
 import java.util.Date;
@@ -22,4 +24,35 @@ public class Alarm {
     private Date eventTime;
     private String eventUser;
     private String eventComment;
+
+    public static Alarm issue(Long alarmDefId, Long equipmentId, BaseMessage<AlarmReportBody> message){
+        Date currnetDate = new Date();
+        return Alarm.builder()
+                .alarmDefId(alarmDefId)
+                .equipmentId(equipmentId)
+                .alarmState(message.getBody().getAlarmState())
+                .createTime(currnetDate)
+                //.clearTime()
+                .eventName(message.getHeader().getMessageName())
+                .eventTime(currnetDate)
+                .timeKey(message.getHeader().getTransactionId())
+                .eventUser(message.getHeader().getEventUser())
+                .eventComment(message.getHeader().getEventComment()).
+                build();
+    }
+    public void updateAlarm(BaseMessage<AlarmReportBody> message){
+        Date currnetDate = new Date();
+        this.setAlarmState(message.getBody().getAlarmState());
+        if(message.getBody().getAlarmState().equals("issue")) {
+            this.setCreateTime(currnetDate);
+        }
+        else{
+            this.setClearTime(currnetDate);
+        }
+        this.setEventName(message.getHeader().getMessageName());
+        this.setEventTime(currnetDate);
+        this.setTimeKey(message.getHeader().getTransactionId());
+        this.setEventUser(message.getHeader().getEventUser());
+        this.setEventComment(message.getHeader().getEventComment());
+    }
 }

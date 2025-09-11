@@ -1,12 +1,11 @@
 package kr.co.aim.api.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.aim.api.dto.response.ReplySample;
+import kr.co.aim.common.format.response.ReplySample;
 import kr.co.aim.common.handler.MessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Slf4j

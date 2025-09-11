@@ -1,4 +1,4 @@
-package kr.co.aim.api.dto.response;
+package kr.co.aim.common.format.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

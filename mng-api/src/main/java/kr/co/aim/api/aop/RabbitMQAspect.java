@@ -1,6 +1,9 @@
 package kr.co.aim.api.aop;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.aim.common.format.request.MessageHeader;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,9 +17,11 @@ import java.util.UUID;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 @Profile({"pex","tex","dispatcher"})
 @Slf4j
 public class RabbitMQAspect {
+    private final ObjectMapper objectMapper;
 
     // 1. @RabbitListener 어노테이션이 달린 모든 메서드를 Pointcut으로 지정
     @Pointcut("@annotation(org.springframework.amqp.rabbit.annotation.RabbitListener)")
@@ -27,11 +32,15 @@ public class RabbitMQAspect {
     @Around("rabbitListenerPointcut()")
     public Object setMdcAroundRabbitListener(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
-            // 3. MDC에 식별자(traceId) 추가. 메시지 헤더 값을 사용할 수도 있습니다.
-            // 여기서는 간단하게 UUID를 생성합니다.
-            String traceId = UUID.randomUUID().toString().substring(0, 8);
-            MDC.put("traceId", traceId);
-
+            // 3. MDC에 식별자(transactionId) 추가. 메시지 헤더 값을 사용할 수도 있습니다.
+            try {
+                MessageHeader messageHeader = objectMapper.readValue(joinPoint.getArgs()[0].toString(), MessageHeader.class);
+                String transactionId = messageHeader.getHeader().getTransactionId();
+                MDC.put("transactionId", transactionId);
+            } catch (Exception e) {
+                log.info("MDC set error");
+            }
+            log.info("business logic start");
             // 4. 원래의 @RabbitListener 메서드 실행
             return joinPoint.proceed();
         } catch (Exception e) {
@@ -40,6 +49,7 @@ public class RabbitMQAspect {
             throw e;
         }
         finally {
+            log.info("business logic end");
             // 5. (가장 중요) 메서드 실행이 끝나면 반드시 MDC를 비워줍니다.
             // 이렇게 하지 않으면 스레드 풀의 다른 스레드에 값이 오염됩니다.
             MDC.clear();

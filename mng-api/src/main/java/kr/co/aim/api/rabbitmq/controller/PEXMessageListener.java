@@ -1,7 +1,7 @@
 package kr.co.aim.api.rabbitmq.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.aim.api.dto.request.MessageHeader;
+import kr.co.aim.common.format.request.MessageHeader;
 import kr.co.aim.common.handler.MessageHandler;
 import kr.co.aim.api.rabbitmq.controller.dispatcher.MessageDispatcher;
 import kr.co.aim.infra.config.RabbitConfig;
