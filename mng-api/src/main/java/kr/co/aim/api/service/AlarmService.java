@@ -1,5 +1,6 @@
 package kr.co.aim.api.service;
 
+import jakarta.annotation.PostConstruct;
 import kr.co.aim.common.format.request.BaseMessage;
 import kr.co.aim.common.format.AlarmReportBody;
 import kr.co.aim.domain.model.Alarm;
@@ -22,7 +23,12 @@ public class AlarmService {
     private final AlarmDefRepository alarmDefRepository; // 구현체(Infra)가 아닌 인터페이스(Domain)에 의존
     private final AlarmRepository alarmRepository;
 
-
+    // ============== [확인용 코드 추가] ==============
+//    @PostConstruct
+//    public void checkProxy() {
+//        log.info("### Injected AlarmRepository Class: {}", alarmRepository.getClass().getName());
+//    }
+    // ===============================================
 
     /**
      * 알람을 기록합니다.

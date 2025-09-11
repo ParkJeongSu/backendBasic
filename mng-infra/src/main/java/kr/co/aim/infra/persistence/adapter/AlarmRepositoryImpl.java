@@ -1,5 +1,6 @@
 package kr.co.aim.infra.persistence.adapter;
 
+import kr.co.aim.common.annotation.PublishHistoryEvent;
 import kr.co.aim.domain.model.Alarm;
 import kr.co.aim.domain.repository.AlarmRepository;
 import kr.co.aim.infra.persistence.entity.AlarmEntity;
@@ -42,6 +43,7 @@ public class AlarmRepositoryImpl implements AlarmRepository {
         return alarmEntityOptional.map(alarmMapper::toDomain);
     }
 
+    @PublishHistoryEvent
     @Override
     public Alarm save(Alarm alarm) {
         AlarmEntity entity = alarmMapper.toEntity(alarm);

@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "ALARM")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA를 위한 기본 생성자
-@EntityListeners(AlarmHistoryListener.class)
+//@EntityListeners(AlarmHistoryListener.class)
 public class AlarmEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
