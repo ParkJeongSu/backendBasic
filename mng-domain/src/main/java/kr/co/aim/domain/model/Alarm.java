@@ -2,6 +2,7 @@ package kr.co.aim.domain.model;
 
 import kr.co.aim.common.format.AlarmReportBody;
 import kr.co.aim.common.format.request.BaseMessage;
+import kr.co.aim.common.handler.HasTransactionInfo;
 import lombok.*;
 
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Builder
-public class Alarm {
+public class Alarm implements HasTransactionInfo {
     private Long id;
     private Long alarmDefId;
     private Long equipmentId;

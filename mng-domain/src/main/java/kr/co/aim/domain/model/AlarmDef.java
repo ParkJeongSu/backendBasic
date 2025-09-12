@@ -1,5 +1,6 @@
 package kr.co.aim.domain.model;
 
+import kr.co.aim.common.handler.HasTransactionInfo;
 import lombok.*;
 
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Builder
-public class AlarmDef {
+public class AlarmDef implements HasTransactionInfo {
     private Long id;
     private String alarmCodeName;
     private String alarmType;

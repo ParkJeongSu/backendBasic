@@ -1,6 +1,7 @@
 package kr.co.aim.domain.model;
 
 import jakarta.persistence.*;
+import kr.co.aim.common.handler.HasTransactionInfo;
 import kr.co.aim.common.handler.NotificationHandler;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import java.util.Map;
 @Table(name = "ALARM_ACTION")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "ACTION_TYPE")
-public abstract class AlarmAction {
+public abstract class AlarmAction implements HasTransactionInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

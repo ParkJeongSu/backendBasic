@@ -10,6 +10,7 @@ import lombok.ToString;
 public class Header {
     private String messageName;
     private String transactionId;
+    private String systemName;
     private String timestamp;
     private String version;
     private String replyQueueName;
