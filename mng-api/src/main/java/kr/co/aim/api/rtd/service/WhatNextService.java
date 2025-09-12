@@ -23,7 +23,7 @@ public class WhatNextService {
     private final CarrierSortStep carrierSortStep;
     private final CarrierFilterLastOneStep carrierFilterLastOneStep;
 
-    public CarrierAndCarrierDef execute() throws IOException {
+    public CarrierAndCarrierDef execute() {
 
         List<RuleStep<CarrierAndCarrierDef,CarrierAndCarrierDef>> steps = List.of(
                 carrierFilterStep,

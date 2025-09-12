@@ -1,10 +1,12 @@
 package kr.co.aim.api.service;
 
-import jakarta.annotation.PostConstruct;
-import kr.co.aim.common.format.request.BaseMessage;
 import kr.co.aim.common.format.AlarmReportBody;
+import kr.co.aim.common.format.request.BaseMessage;
+import kr.co.aim.common.handler.NotificationHandler;
 import kr.co.aim.domain.model.Alarm;
+import kr.co.aim.domain.model.AlarmAction;
 import kr.co.aim.domain.model.AlarmDef;
+import kr.co.aim.domain.repository.AlarmActionRepository;
 import kr.co.aim.domain.repository.AlarmDefRepository;
 import kr.co.aim.domain.repository.AlarmRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,6 +25,10 @@ public class AlarmService {
 
     private final AlarmDefRepository alarmDefRepository; // 구현체(Infra)가 아닌 인터페이스(Domain)에 의존
     private final AlarmRepository alarmRepository;
+    private final AlarmActionRepository alarmActionRepository;
+
+    private final Map<String, NotificationHandler> notificationServices;
+
 
     // ============== [확인용 코드 추가] ==============
     //    @PostConstruct
@@ -71,5 +78,10 @@ public class AlarmService {
         alarmRepository.save(alarm);
 
         // TODO: Alarm Action 현재 Alarm Action이 users 테이블이 없어서 강제로 유저 하드코딩 중 추후 수정
+        List<AlarmAction> alarmActionList = alarmActionRepository.findByAlarmDefId(alarmDef.getId());
+        for(AlarmAction alarmAction : alarmActionList){
+            alarmAction.execute(notificationServices);
+        }
+
     }
 }
